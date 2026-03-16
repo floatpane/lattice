@@ -1,6 +1,6 @@
 package module
 
-import tea "github.com/charmbracelet/bubbletea"
+import tea "charm.land/bubbletea/v2"
 
 // Module is the interface every Lattice module must implement.
 // Modules are self-contained: they manage their own state, fetching,

@@ -1,18 +1,20 @@
 package styles
 
 import (
+	"image/color"
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/compat"
 )
 
 var (
 	// Colors — exported for use by modules and layout.
-	Subtle    = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
-	Accent    = lipgloss.AdaptiveColor{Light: "#43BF6D", Dark: "#73F59F"}
-	Warn      = lipgloss.AdaptiveColor{Light: "#F25D94", Dark: "#F55385"}
-	Highlight = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
-	DimText   = lipgloss.AdaptiveColor{Light: "#9B9B9B", Dark: "#5C5C5C"}
+	Subtle    = compat.AdaptiveColor{Light: lipgloss.Color("#D9DCCF"), Dark: lipgloss.Color("#383838")}
+	Accent    = compat.AdaptiveColor{Light: lipgloss.Color("#43BF6D"), Dark: lipgloss.Color("#73F59F")}
+	Warn      = compat.AdaptiveColor{Light: lipgloss.Color("#F25D94"), Dark: lipgloss.Color("#F55385")}
+	Highlight = compat.AdaptiveColor{Light: lipgloss.Color("#874BFD"), Dark: lipgloss.Color("#7D56F4")}
+	DimText   = compat.AdaptiveColor{Light: lipgloss.Color("#9B9B9B"), Dark: lipgloss.Color("#5C5C5C")}
 
 	statLabelStyle = lipgloss.NewStyle().
 			Foreground(Subtle).
@@ -25,7 +27,7 @@ var (
 )
 
 // RenderBar draws a horizontal bar chart.
-func RenderBar(percent float64, width int, color lipgloss.TerminalColor) string {
+func RenderBar(percent float64, width int, c color.Color) string {
 	if percent < 0 {
 		percent = 0
 	}
@@ -40,7 +42,7 @@ func RenderBar(percent float64, width int, color lipgloss.TerminalColor) string 
 	if filled > width {
 		filled = width
 	}
-	return lipgloss.NewStyle().Foreground(color).Render(strings.Repeat("█", filled)) +
+	return lipgloss.NewStyle().Foreground(c).Render(strings.Repeat("█", filled)) +
 		lipgloss.NewStyle().Foreground(Subtle).Render(strings.Repeat("░", empty))
 }
 

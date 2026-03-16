@@ -4,7 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/compat"
 )
 
 func TestTruncate(t *testing.T) {
@@ -85,10 +86,10 @@ func TestRenderStat(t *testing.T) {
 
 func TestColorsAreDefined(t *testing.T) {
 	// Verify all exported colors have both light and dark values
-	colors := []lipgloss.AdaptiveColor{Subtle, Accent, Warn, Highlight, DimText}
+	colors := []compat.AdaptiveColor{Subtle, Accent, Warn, Highlight, DimText}
 	for i, c := range colors {
-		if c.Light == "" || c.Dark == "" {
-			t.Errorf("color %d has empty light or dark value", i)
+		if c.Light == nil || c.Dark == nil {
+			t.Errorf("color %d has nil light or dark value", i)
 		}
 	}
 }

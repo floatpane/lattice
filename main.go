@@ -16,7 +16,7 @@ import (
 	// Built-in modules register themselves via init().
 	_ "github.com/floatpane/lattice/internal/modules"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -64,7 +64,6 @@ func runDashboard() {
 
 	p := tea.NewProgram(
 		&app{modules: mods, columns: cfg.Columns},
-		tea.WithAltScreen(),
 	)
 	if _, err := p.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
@@ -119,7 +118,7 @@ func (a *app) Init() tea.Cmd {
 
 func (a *app) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if msg.String() == "q" || msg.String() == "ctrl+c" {
 			return a, tea.Quit
 		}
@@ -138,11 +137,16 @@ func (a *app) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return a, tea.Batch(cmds...)
 }
 
-func (a *app) View() string {
+func (a *app) View() tea.View {
+	var content string
 	if a.width == 0 {
-		return "Starting Lattice…"
+		content = "Starting Lattice…"
+	} else {
+		content = layout.Render(a.modules, a.columns, a.width, a.height)
 	}
-	return layout.Render(a.modules, a.columns, a.width, a.height)
+	v := tea.NewView(content)
+	v.AltScreen = true
+	return v
 }
 
 // --- CLI subcommands ---

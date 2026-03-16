@@ -12,7 +12,7 @@ import (
 	"github.com/floatpane/lattice/pkg/registry"
 	"github.com/floatpane/lattice/pkg/styles"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 )

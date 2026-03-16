@@ -3,7 +3,7 @@ package registry
 import (
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/floatpane/lattice/pkg/config"
 	"github.com/floatpane/lattice/pkg/module"
 )

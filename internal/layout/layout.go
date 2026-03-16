@@ -4,7 +4,7 @@ import (
 	"github.com/floatpane/lattice/pkg/module"
 	"github.com/floatpane/lattice/pkg/styles"
 
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/lipgloss/v2"
 )
 
 var (
