@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	github.com/charmbracelet/bubbletea v1.3.10
-	github.com/charmbracelet/lipgloss v1.1.0
+	github.com/charmbracelet/lipgloss/v2 v2.0.2
 	github.com/joho/godotenv v1.5.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	gopkg.in/yaml.v3 v3.0.1
