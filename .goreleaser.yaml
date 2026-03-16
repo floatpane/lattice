@@ -1,0 +1,71 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - main: .
+    binary: lattice
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
+
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    format_overrides:
+      - goos: windows
+        format: zip
+
+snapcrafts:
+  - name: lattice
+    publish: true
+    summary: A modular terminal dashboard built with Go and Bubble Tea
+    description: |
+      Lattice is a beautiful, modular terminal dashboard. It comes with
+      built-in modules for clock, system stats, weather, GitHub activity,
+      uptime, and a greeting. Extend it with plugins written in any language.
+    grade: stable
+    confinement: strict
+    license: MIT
+    apps:
+      lattice:
+        command: lattice
+        plugs:
+          - home
+          - network
+          - network-bind
+
+brews:
+  - repository:
+      owner: floatpane
+      name: homebrew-tap
+    homepage: https://github.com/floatpane/lattice
+    description: A modular terminal dashboard built with Go and Bubble Tea
+    license: MIT
+    install: |
+      bin.install "lattice"
+    test: |
+      system bin/"lattice", "list"
+
+changelog:
+  use: github-native
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  github:
+    owner: floatpane
+    name: lattice

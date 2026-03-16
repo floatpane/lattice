@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        go: ["1.25"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Run tests
+        run: go test -race -coverprofile=coverage.txt ./...
+
+      - name: Upload coverage
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.go }}
+          path: coverage.txt
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  labeler:
+    name: Label PR
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # File-based labels (docs, ci, deps, plugins)
+      - uses: actions/labeler@v5
+        with:
+          configuration-path: .github/labeler.yml
+
+      # Conventional commit labels from PR title
+      - name: Label from PR title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title.toLowerCase();
+            const labels = [];
+
+            if (title.startsWith('feat:') || title.startsWith('feat(') || title.startsWith('feature:') || title.startsWith('feature(')) {
+              labels.push('feature');
+            }
+            if (title.startsWith('fix:') || title.startsWith('fix(')) {
+              labels.push('bug');
+            }
+            if (title.startsWith('docs:') || title.startsWith('docs(')) {
+              labels.push('documentation');
+            }
+            if (title.startsWith('chore:') || title.startsWith('chore(')) {
+              labels.push('chore');
+            }
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels,
+              });
+            }

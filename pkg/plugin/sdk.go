@@ -25,6 +25,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -58,11 +59,17 @@ type Response struct {
 
 // Run starts the plugin loop. It reads requests from stdin and calls
 // handler for each one, writing the response to stdout.
-// This function never returns.
+// This function never returns under normal operation.
 func Run(handler func(Request) Response) {
-	scanner := bufio.NewScanner(os.Stdin)
+	RunWith(os.Stdin, os.Stdout, handler)
+}
+
+// RunWith is like Run but reads from r and writes to w.
+// Useful for testing plugins without real stdin/stdout.
+func RunWith(r io.Reader, w io.Writer, handler func(Request) Response) {
+	scanner := bufio.NewScanner(r)
 	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
-	enc := json.NewEncoder(os.Stdout)
+	enc := json.NewEncoder(w)
 
 	for scanner.Scan() {
 		var req Request

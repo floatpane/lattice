@@ -41,6 +41,13 @@ func Get(name string) Constructor {
 	return registry[name]
 }
 
+// Reset clears the registry. Only for use in tests.
+func Reset() {
+	mu.Lock()
+	defer mu.Unlock()
+	registry = map[string]Constructor{}
+}
+
 // List returns all registered module names, sorted.
 func List() []string {
 	mu.RLock()
