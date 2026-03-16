@@ -49,13 +49,17 @@ func TestLoadReadsExistingConfig(t *testing.T) {
 	t.Setenv("HOME", tmp)
 
 	dir := filepath.Join(tmp, ".config", "lattice")
-	os.MkdirAll(dir, 0755)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
 	yaml := `columns: 3
 modules:
   - type: clock
   - type: system
 `
-	os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644)
+	if err := os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	cfg := Load()
 	if cfg.Columns != 3 {
@@ -71,12 +75,16 @@ func TestLoadFixesInvalidColumns(t *testing.T) {
 	t.Setenv("HOME", tmp)
 
 	dir := filepath.Join(tmp, ".config", "lattice")
-	os.MkdirAll(dir, 0755)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
 	yaml := `columns: 0
 modules:
   - type: clock
 `
-	os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644)
+	if err := os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	cfg := Load()
 	if cfg.Columns != 2 {
@@ -89,11 +97,15 @@ func TestLoadFallsBackOnEmptyModules(t *testing.T) {
 	t.Setenv("HOME", tmp)
 
 	dir := filepath.Join(tmp, ".config", "lattice")
-	os.MkdirAll(dir, 0755)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
 	yaml := `columns: 2
 modules: []
 `
-	os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644)
+	if err := os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(yaml), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	cfg := Load()
 	if len(cfg.Modules) == 0 {
@@ -106,8 +118,12 @@ func TestLoadHandlesInvalidYAML(t *testing.T) {
 	t.Setenv("HOME", tmp)
 
 	dir := filepath.Join(tmp, ".config", "lattice")
-	os.MkdirAll(dir, 0755)
-	os.WriteFile(filepath.Join(dir, "config.yaml"), []byte("{{{{not yaml"), 0644)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "config.yaml"), []byte("{{{{not yaml"), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	cfg := Load()
 	if cfg.Columns != 2 {

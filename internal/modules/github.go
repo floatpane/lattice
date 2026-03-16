@@ -110,7 +110,7 @@ func fetchGitHubData(username, token string) githubDataMsg {
 	if err != nil {
 		return githubDataMsg{status: "Network error"}
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != 200 {
 		return githubDataMsg{status: fmt.Sprintf("HTTP %d", resp.StatusCode)}

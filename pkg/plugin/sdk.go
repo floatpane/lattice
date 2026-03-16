@@ -74,10 +74,10 @@ func RunWith(r io.Reader, w io.Writer, handler func(Request) Response) {
 	for scanner.Scan() {
 		var req Request
 		if err := json.Unmarshal(scanner.Bytes(), &req); err != nil {
-			enc.Encode(Response{Error: fmt.Sprintf("bad request: %v", err)})
+			_ = enc.Encode(Response{Error: fmt.Sprintf("bad request: %v", err)})
 			continue
 		}
 		resp := handler(req)
-		enc.Encode(resp)
+		_ = enc.Encode(resp)
 	}
 }

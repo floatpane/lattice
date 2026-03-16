@@ -114,7 +114,7 @@ func (m *ExternalModule) View(width, height int) string {
 	if m.started && m.stdin != nil {
 		req := proto.Request{Type: "view", Width: width, Height: height}
 		if data, err := json.Marshal(req); err == nil {
-			m.stdin.Write(append(data, '\n'))
+			_, _ = m.stdin.Write(append(data, '\n'))
 			if m.scanner.Scan() {
 				var resp proto.Response
 				if err := json.Unmarshal(m.scanner.Bytes(), &resp); err == nil && resp.Content != "" {
@@ -152,7 +152,7 @@ func (m *ExternalModule) startPlugin() tea.Msg {
 
 	req := proto.Request{Type: "init", Config: m.cfg.Config}
 	data, _ := json.Marshal(req)
-	m.stdin.Write(append(data, '\n'))
+	_, _ = m.stdin.Write(append(data, '\n'))
 
 	if !m.scanner.Scan() {
 		return pluginResponseMsg{binPath: m.binPath, err: fmt.Errorf("no init response")}
@@ -176,7 +176,7 @@ func (m *ExternalModule) sendUpdate() tea.Msg {
 
 	req := proto.Request{Type: "update"}
 	data, _ := json.Marshal(req)
-	m.stdin.Write(append(data, '\n'))
+	_, _ = m.stdin.Write(append(data, '\n'))
 
 	if !m.scanner.Scan() {
 		return pluginResponseMsg{binPath: m.binPath, err: fmt.Errorf("plugin stopped")}
