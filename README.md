@@ -15,7 +15,7 @@ A modular terminal dashboard built with [Bubble Tea](https://github.com/charmbra
 ╰──────────────────────╯╰──────────────────────╯
 ╭──────────────────────╮╭──────────────────────╮
 │ WEATHER              ││ UPTIME               │
-│ ☀ Clear              ││ 3d 7h 22m            │
+│ ☀ Clear             ││ 3d 7h 22m            │
 │ 🌡 +18°C (feels +16) ││ since Mar 13, 08:14  │
 ╰──────────────────────╯╰──────────────────────╯
 ```
