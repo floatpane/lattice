@@ -19,10 +19,31 @@ jobs:
         with:
           go-version: "1.26"
 
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch the new tag
+        run: git fetch --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install Snapcraft
         run: sudo snap install snapcraft --classic
 
+      - name: Clean Snapcraft cache
+        run: |
+          sudo rm -rf /home/runner/.cache/snapcraft || true
+          sudo rm -rf /root/.cache/snapcraft || true
+          sudo rm -rf ~/.cache/snapcraft || true
+          mkdir -p /home/runner/.cache/snapcraft/download
+          mkdir -p /home/runner/.cache/snapcraft/stage-packages
+          chmod -R 755 /home/runner/.cache/snapcraft
+
       - name: Run GoReleaser
+        if: steps.tag_version.outputs.new_tag
         uses: goreleaser/goreleaser-action@v7
         with:
           version: "~> v2"
