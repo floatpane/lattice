@@ -3,7 +3,7 @@ module github.com/floatpane/lattice
 go 1.25.5
 
 require (
-	github.com/charmbracelet/bubbletea v1.3.10
+	github.com/charmbracelet/bubbletea/v2 v2.0.2
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/joho/godotenv v1.5.1
 	github.com/shirou/gopsutil/v3 v3.24.5
