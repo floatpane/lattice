@@ -4,9 +4,9 @@
   "postUpdateOptions": ["gomodTidy"],
   "packageRules": [
     {
-      "matchPackageNames": ["go"],
-      "matchManagers": ["gomod", "github-actions"],
-      "groupName": "go"
+      "matchDepNames": ["go"],
+      "groupName": "go",
+      "rangeStrategy": "bump"
     }
   ]
 }
