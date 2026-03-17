@@ -53,6 +53,7 @@ brews:
       bin.install "lattice"
     test: |
       system bin/"lattice", "list"
+    token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
 changelog:
   use: github-native
