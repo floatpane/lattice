@@ -100,10 +100,12 @@ func isExecutable(path string) bool {
 }
 
 type app struct {
-	modules []module.Module
-	columns int
-	width   int
-	height  int
+	modules        []module.Module
+	columns        int
+	width          int
+	height         int
+	placements     []layout.ScreenPlacement // image placements from last render
+	needsImageDraw bool                     // true when images need to be (re)drawn
 }
 
 func (a *app) Init() tea.Cmd {
@@ -125,6 +127,7 @@ func (a *app) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		a.width = msg.Width
 		a.height = msg.Height
+		a.needsImageDraw = true
 		return a, nil
 	}
 
@@ -134,6 +137,13 @@ func (a *app) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 	}
+
+	// Only re-display images when something changed (new upload, resize, track change).
+	if a.needsImageDraw && len(a.placements) > 0 {
+		a.needsImageDraw = false
+		cmds = append(cmds, renderImagePlacements(a.placements))
+	}
+
 	return a, tea.Batch(cmds...)
 }
 
@@ -142,11 +152,42 @@ func (a *app) View() tea.View {
 	if a.width == 0 {
 		content = "Starting Lattice…"
 	} else {
-		content = layout.Render(a.modules, a.columns, a.width, a.height)
+		var p []layout.ScreenPlacement
+		content, p = layout.Render(a.modules, a.columns, a.width, a.height)
+
+		// Check if placements changed (new image, track change, resize, etc.)
+		if !samePlacements(a.placements, p) {
+			a.needsImageDraw = true
+		}
+		a.placements = p
 	}
 	v := tea.NewView(content)
 	v.AltScreen = true
 	return v
+}
+
+// renderImagePlacements builds a tea.Raw command that displays images at their
+// absolute screen positions using cursor save/restore.
+func renderImagePlacements(placements []layout.ScreenPlacement) tea.Cmd {
+	var b strings.Builder
+	for _, p := range placements {
+		// Save cursor, move to absolute position, render image, restore cursor
+		fmt.Fprintf(&b, "\x1b[s\x1b[%d;%dH%s\x1b[u", p.Row, p.Col, p.Escape)
+	}
+	raw := b.String()
+	return tea.Raw(raw)
+}
+
+func samePlacements(a, b []layout.ScreenPlacement) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i].Row != b[i].Row || a[i].Col != b[i].Col || a[i].Escape != b[i].Escape {
+			return false
+		}
+	}
+	return true
 }
 
 // --- CLI subcommands ---

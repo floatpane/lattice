@@ -26,3 +26,19 @@ type Module interface {
 	// excluding border/padding). The layout engine uses these as hints.
 	MinSize() (width, height int)
 }
+
+// ImagePlacement describes an image to render at a specific screen position.
+// The Row and Col are relative to the module's content area; the layout engine
+// converts them to absolute terminal coordinates.
+type ImagePlacement struct {
+	Row    int    // row offset within the module content area
+	Col    int    // col offset within the module content area
+	Escape string // kitty graphics escape to display the image (e.g. a=p,i=ID)
+}
+
+// ImagePlacer is an optional interface modules can implement to render
+// images via the Kitty graphics protocol. The layout engine will call
+// ImagePlacements() after View() and position the images on screen.
+type ImagePlacer interface {
+	ImagePlacements() []ImagePlacement
+}

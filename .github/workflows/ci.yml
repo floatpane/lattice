@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-go@v6
         with:
-          go-version: "1.26"
+          go-version: "1.26.1"
 
       - name: Run tests
         run: go test -race -coverprofile=coverage.txt ./...
@@ -41,7 +41,7 @@ jobs:
 
       - uses: actions/setup-go@v6
         with:
-          go-version: "1.26"
+          go-version: "1.26.1"
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
@@ -51,7 +51,7 @@ jobs:
   labeler:
     name: Label PR
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request_target'
     permissions:
       contents: read
       pull-requests: write
