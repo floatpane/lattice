@@ -301,7 +301,7 @@ func fetchSpotifyDataNow() spotifyDataMsg {
 	if err != nil {
 		return spotifyDataMsg{status: "D-Bus unavailable"}
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	obj := conn.Object("org.mpris.MediaPlayer2.spotify", "/org/mpris/MediaPlayer2")
 

@@ -84,7 +84,7 @@ func Render(modules []module.Module, columns, termWidth, termHeight int) (string
 				// - box border left: 1 col, box padding left: 2 cols
 				// Total row offset from box top to content: 4
 				// Total col offset from box left to content: 3
-				absRow := 1 + colHeights[col] + 4 + ip.Row + 1 // +1 for docPadTop, +1 for 1-based
+				absRow := 1 + colHeights[col] + 4 + ip.Row + 1  // +1 for docPadTop, +1 for 1-based
 				absCol := 2 + (col * colWidth) + 3 + ip.Col + 1 // +2 for docPadLeft, +1 for 1-based
 				placements = append(placements, ScreenPlacement{
 					Row:    absRow,

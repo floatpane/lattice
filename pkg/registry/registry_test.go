@@ -10,11 +10,11 @@ import (
 
 type stubModule struct{}
 
-func (s *stubModule) Name() string                  { return "STUB" }
-func (s *stubModule) Init() tea.Cmd                 { return nil }
-func (s *stubModule) Update(_ tea.Msg) tea.Cmd      { return nil }
-func (s *stubModule) View(_, _ int) string           { return "stub" }
-func (s *stubModule) MinSize() (int, int)            { return 10, 3 }
+func (s *stubModule) Name() string             { return "STUB" }
+func (s *stubModule) Init() tea.Cmd            { return nil }
+func (s *stubModule) Update(_ tea.Msg) tea.Cmd { return nil }
+func (s *stubModule) View(_, _ int) string     { return "stub" }
+func (s *stubModule) MinSize() (int, int)      { return 10, 3 }
 
 func stubCtor(_ config.ModuleConfig) module.Module {
 	return &stubModule{}

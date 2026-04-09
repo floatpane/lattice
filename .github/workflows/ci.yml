@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [master]
   push:
     branches: [master]
@@ -47,49 +47,3 @@ jobs:
         uses: golangci/golangci-lint-action@v9
         with:
           version: latest
-
-  labeler:
-    name: Label PR
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target'
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-    steps:
-      - uses: actions/checkout@v6
-
-      # File-based labels (docs, ci, deps, plugins)
-      - uses: actions/labeler@v6
-        with:
-          configuration-path: .github/labeler.yml
-
-      # Conventional commit labels from PR title
-      - name: Label from PR title
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const title = context.payload.pull_request.title.toLowerCase();
-            const labels = [];
-
-            if (title.startsWith('feat:') || title.startsWith('feat(') || title.startsWith('feature:') || title.startsWith('feature(')) {
-              labels.push('feature');
-            }
-            if (title.startsWith('fix:') || title.startsWith('fix(')) {
-              labels.push('bug');
-            }
-            if (title.startsWith('docs:') || title.startsWith('docs(')) {
-              labels.push('documentation');
-            }
-            if (title.startsWith('chore:') || title.startsWith('chore(')) {
-              labels.push('chore');
-            }
-
-            if (labels.length > 0) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                labels,
-              });
-            }

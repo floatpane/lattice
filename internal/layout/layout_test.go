@@ -14,11 +14,11 @@ type mockModule struct {
 	w, h    int
 }
 
-func (m *mockModule) Name() string                  { return m.name }
-func (m *mockModule) Init() tea.Cmd                 { return nil }
-func (m *mockModule) Update(_ tea.Msg) tea.Cmd      { return nil }
-func (m *mockModule) View(_, _ int) string           { return m.content }
-func (m *mockModule) MinSize() (int, int)            { return m.w, m.h }
+func (m *mockModule) Name() string             { return m.name }
+func (m *mockModule) Init() tea.Cmd            { return nil }
+func (m *mockModule) Update(_ tea.Msg) tea.Cmd { return nil }
+func (m *mockModule) View(_, _ int) string     { return m.content }
+func (m *mockModule) MinSize() (int, int)      { return m.w, m.h }
 
 func TestRenderEmpty(t *testing.T) {
 	result, _ := Render(nil, 2, 80, 24)
