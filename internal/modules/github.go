@@ -120,10 +120,10 @@ func fetchGitHubData(username, token string) githubDataMsg {
 		Message string `json:"message"`
 	}
 	type Payload struct {
-		Action      string   `json:"action"`
-		Size        int      `json:"size"`
-		Ref         string   `json:"ref"`
-		Head        string   `json:"head"`
+		Action      string `json:"action"`
+		Size        int    `json:"size"`
+		Ref         string `json:"ref"`
+		Head        string `json:"head"`
 		PullRequest struct {
 			Merged bool `json:"merged"`
 		} `json:"pull_request"`
