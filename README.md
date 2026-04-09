@@ -1,3 +1,5 @@
+<img src="public/logo.jpg" width="256" height="256">
+
 # Lattice
 
 A modular terminal dashboard built with [Bubble Tea](https://github.com/charmbracelet/bubbletea). Lattice ships with a set of built-in modules and supports external plugins written in any language.
@@ -15,8 +17,8 @@ A modular terminal dashboard built with [Bubble Tea](https://github.com/charmbra
 ╰──────────────────────╯╰──────────────────────╯
 ╭──────────────────────╮╭──────────────────────╮
 │ WEATHER              ││ UPTIME               │
-│ ☀ Clear             ││ 3d 7h 22m            │
-│ 🌡 +18°C (feels +16) ││ since Mar 13, 08:14  │
+│ ☀ Clear              ││ 3d 7h 22m            │
+│ +18°C (feels +16)    ││ since Mar 13, 08:14  │
 ╰──────────────────────╯╰──────────────────────╯
 ```
 
@@ -189,26 +191,6 @@ while IFS= read -r line; do
     *)      echo '{"content":"Hello from bash!"}' ;;
   esac
 done
-```
-
-## Project structure
-
-```
-lattice/
-  main.go                      Entry point, CLI, app model
-  internal/
-    layout/layout.go           Grid layout engine
-    modules/                   Built-in module implementations
-      clock.go, system.go, github.go,
-      weather.go, uptime.go, greeting.go
-    plugin/runner.go           External plugin process manager
-  pkg/                         Public API (importable by plugins)
-    module/module.go           Module interface
-    config/config.go           Config types + loader
-    registry/registry.go       Module registry (Register/Get/List)
-    styles/styles.go           Shared colors + helpers
-    plugin/sdk.go              Plugin SDK (types + Run helper)
-  config.example.yaml          Example configuration
 ```
 
 ## License
