@@ -23,7 +23,7 @@ jobs:
 
       # Conventional commit labels from PR title
       - name: Label from PR title
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const title = context.payload.pull_request.title.toLowerCase();
