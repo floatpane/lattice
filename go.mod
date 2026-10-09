@@ -1,6 +1,6 @@
 module github.com/floatpane/lattice
 
-go 1.26.4
+go 1.27.2
 
 require (
 	charm.land/bubbletea/v2 v2.0.6
